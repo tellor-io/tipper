@@ -1,0 +1,16 @@
+name: "Tellor Tipper"
+description: "Automate tips to Tellor Oracle with Github Actions"
+inputs:
+  network: #mainnet or rinkeby
+    description: "ethereum network to tip to"
+    required: true
+    default: "mainnet"
+  myId: #ID of tip
+    description: "ID of Tip"
+    required: true
+outputs:
+  time: #id of output
+    description: "Timestamp"
+runs:
+  using: "node12"
+  main: "AddTip.js"
