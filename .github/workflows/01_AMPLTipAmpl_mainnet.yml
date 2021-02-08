@@ -1,0 +1,29 @@
+name: AMPLTipAmpl_mainnet
+on:
+  schedule: 
+  - cron: "0 0 * * *"  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#scheduled-events
+
+
+jobs:
+  AMPLTipAmpl_mainnet:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run tests with Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: node generalScripts/AddTip.js mainnet 10
+
+      env:
+        ETH_PK: ${{ secrets.ETH_PK }}
+        ETH_PUB: ${{ secrets.ETH_PUB }}
+        MAINNET_NODE: ${{ secrets.MAINNET_NODE }}
+        RINKEBY_ETH_PK: ${{ secrets.RINKEBY_ETH_PK }}
+        RINKEBY_ETH_PUB: ${{ secrets.RINKEBY_ETH_PUB }}
