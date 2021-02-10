@@ -10,7 +10,7 @@ require('dotenv').config()
 const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
-const myId = core.getInput('myId')
+const dataId = core.getInput('myId')
 
 const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
@@ -22,7 +22,7 @@ var gas_limit = 400000
 
 console.log(_UTCtime)
 console.log('https://www.etherchain.org/api/gasPriceOracle')
-console.log('network',process.argv[2])
+console.log('network',network)
 
 function sleep_s(secs) {
     secs = (+new Date) + secs * 1000;
@@ -178,4 +178,4 @@ let run = async function (net, myid) {
 }
 
 // run(process.argv[2],process.argv[3])
-run(network, myId)
+run(network, dataId)
