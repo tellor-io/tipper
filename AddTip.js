@@ -115,17 +115,17 @@ let run = async function (net, myid) {
     }
 
 
-    // try {
-    var balNow = ethers.utils.formatEther(await provider.getBalance(pubAddr))
-    console.log("Requests Address", pubAddr)
-    console.log("Requester ETH Balance", balNow)
-    var ttbalanceNow = ethers.utils.formatEther(await contractWithSigner.balanceOf(pubAddr))
-    console.log('Tellor Tributes balance', ttbalanceNow)
-    var txestimate = (gasP * gas_limit / 1e18);
-    // } catch (error) {
-        // console.error(error)
-        // process.exit(1)
-    // }
+    try {
+        var balNow = ethers.utils.formatEther(await provider.getBalance(pubAddr))
+        console.log("Requests Address", pubAddr)
+        console.log("Requester ETH Balance", balNow)
+        var ttbalanceNow = ethers.utils.formatEther(await contractWithSigner.balanceOf(pubAddr))
+        console.log('Tellor Tributes balance', ttbalanceNow)
+        var txestimate = (gasP * gas_limit / 1e18);
+    } catch (error) {
+        console.error(error)
+        process.exit(1)
+    }
 
     try {
         //check it is not already on queue and if not then tip
