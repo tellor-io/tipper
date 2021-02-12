@@ -99,7 +99,7 @@ let run = async function (net, myid) {
 
     try {
         let wallet = new ethers.Wallet(privKey, provider);
-        let abi = await loadJsonFile(path.join("abi", "tellor.json"))
+        let abi = await loadJsonFile(path.join("..", "abi", "tellor.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         var contractWithSigner = contract.connect(wallet);
 
