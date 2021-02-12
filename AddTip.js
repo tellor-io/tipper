@@ -99,17 +99,11 @@ let run = async function (net, myid) {
 
     try {
         let wallet = new ethers.Wallet(privKey, provider);
-        console.log(process.cwd())
-        const fs = require('fs'); 
- 
-        var directory = './'; 
-         
-        fs.readdir(directory, (err, files) => { 
-            if(err) { 
-                // handle error; e.g., folder didn't exist 
-            } 
-            // 'files' is an array of the files found in the directory 
-        }); 
+        var cwd = console.log(process.cwd())
+
+        var fs = require('fs');
+        var files = fs.readdirSync(cwd);
+
         let abi = await loadJsonFile(path.join(".", "..", "abi", "tellor.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         var contractWithSigner = contract.connect(wallet);
