@@ -99,10 +99,10 @@ let run = async function (net, myid) {
 
     try {
         let wallet = new ethers.Wallet(privKey, provider);
-        var cwd = console.log(process.cwd())
+        console.log(process.cwd())
 
         var fs = require('fs');
-        var files = fs.readdirSync(cwd);
+        var files = fs.readdirSync('/home/runner/work/tip-tester/tip-tester');
 
         let abi = await loadJsonFile(path.join(".", "..", "abi", "tellor.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
