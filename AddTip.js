@@ -102,7 +102,7 @@ let run = async function (net, myid) {
         console.log(process.cwd())
 
         var fs = require('fs');
-        var files = fs.readdirSync('/home/runner/work/tip-tester');
+        var files = fs.readdirSync('/home/runner/work/tip-tester/tip-tester');
         console.log(files)
         let abi = await loadJsonFile(path.join(".", "..", "abi", "tellor.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
