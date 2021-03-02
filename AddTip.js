@@ -72,7 +72,7 @@ let run = async function (net, myid) {
             var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
             var pubAddr = process.env.RINKEBY_ETH_PUB
             var privKey = process.env.RINKEBY_ETH_PK
-            var provider = new ethers.providers.JsonRpcProvider(process.env.RINKEBY_NODE)
+            var provider = new ethers.providers.JsonRpcProvider(process.env.NODE)
             
         } else {
            console.log( "network not defined")
