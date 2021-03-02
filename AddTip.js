@@ -69,7 +69,7 @@ let run = async function (net, myid) {
         } else if (net == "rinkeby") {
             var network = "rinkeby"
             var etherscanUrl = "https://rinkeby.etherscan.io"
-            var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
+            var tellorMasterAddress = '0xfe41cb708cd98c5b20423433309e55b53f79134a'
             var pubAddr = process.env.RINKEBY_ETH_PUB
             var privKey = process.env.RINKEBY_ETH_PK
             var provider = new ethers.providers.JsonRpcProvider(process.env.NODE)
