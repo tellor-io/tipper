@@ -54,8 +54,8 @@ let run = async function (net, myid) {
             var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
             var pubAddr = process.env.ETH_PUB
             var privKey = process.env.ETH_PK
-            //var provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_NODE)
-            const url = new URL(process.env.MAINNET_NODE);
+            //var provider = new ethers.providers.JsonRpcProvider(process.env.NODE)
+            const url = new URL(process.env.NODE);
             var urlInfo = {
                 url: url.href,
                 user: url.username,
