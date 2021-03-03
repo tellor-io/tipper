@@ -54,7 +54,6 @@ let run = async function (net, myid) {
             var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
-            //var provider = new ethers.providers.JsonRpcProvider(process.env.NODE)
             const url = new URL(process.env.NODE);
             var urlInfo = {
                 url: url.href,
@@ -182,5 +181,4 @@ let run = async function (net, myid) {
     }
 }
 
-// run(process.argv[2],process.argv[3])
 run(network, dataId)
