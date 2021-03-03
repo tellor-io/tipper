@@ -182,5 +182,4 @@ let run = async function (net, myid) {
     }
 }
 
-// run(process.argv[2],process.argv[3])
 run(network, dataId)
