@@ -3,35 +3,37 @@
 //                Tip my request id on Tellor                                  //
 
 /******************************************************************************************/
-// node TellorMonitor/01_tip_apl.js network myid
 
 require('dotenv').config()
 //environment variables
 const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
-const dataId = core.getInput('myId')
+const dataId = core.getInput('tipID')
 
+//libraries
 const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
 const path = require("path")
 const loadJsonFile = require('load-json-file')
 
+//current date and gas limit
 var _UTCtime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 var gas_limit = 400000
 
+//print out current time, gas price, and network
 console.log(_UTCtime)
 console.log('https://www.etherchain.org/api/gasPriceOracle')
 console.log('network',network)
 
 function sleep_s(secs) {
+    //sleep for "secs" number of seconds
     secs = (+new Date) + secs * 1000;
     while ((+new Date) < secs);
 }
 
-//https://ethgasstation.info/json/ethgasAPI.json
-//https://www.etherchain.org/api/gasPriceOracle
 async function fetchGasPrice() {
+    //returns gas price as retrived from etherchain
     const URL = `https://www.etherchain.org/api/gasPriceOracle`;
     try {
         const fetchResult = fetch(URL);
@@ -46,8 +48,13 @@ async function fetchGasPrice() {
 }
 
 
-let run = async function (net, myid) {
+let run = async function (net, tipID) {
+    /* 
+    Requests a tip data type for miners to mine
+    Sends TRB tip amount to miner network
+    */
     try {
+        //connect to network
         if (net == "mainnet") {
             var network = "mainnet"
             var etherscanUrl = "https://etherscan.io"
@@ -85,8 +92,7 @@ let run = async function (net, myid) {
         process.exit(1)
     }
 
-
-
+    //fetch gas price
     try {
         var gasP = await fetchGasPrice()
         console.log("gasP1", gasP)
@@ -96,6 +102,7 @@ let run = async function (net, myid) {
         process.exit(1)
     }
 
+    //connect to wallet and tellor contract
     try {
         let wallet = new ethers.Wallet(privKey, provider);
         console.log(process.cwd())
@@ -113,7 +120,7 @@ let run = async function (net, myid) {
         process.exit(1)
     }
 
-
+    //print wallet's TRB balance
     try {
         var balNow = ethers.utils.formatEther(await provider.getBalance(pubAddr))
         console.log("Requests Address", pubAddr)
@@ -135,8 +142,8 @@ let run = async function (net, myid) {
         var i = 0
             if (x >0){            
                 while ( i<x){
-                    console.log("myid", myid)
-                    if (myid == reqIds[i]*1) {
+                    console.log("tipID", tipID)
+                    if (tipID == reqIds[i]*1) {
                         console.log("reqIds[i]", i, reqIds[i]*1 )
                         inQ++
                         console.log("inQ?", inQ*1)
@@ -153,15 +160,16 @@ let run = async function (net, myid) {
         process.exit(1)
     }
 
+    //send tip if balance is sufficient
     if (inQ ==0) {
         if (gasP != 0 && txestimate < balNow && ttbalanceNow > 1 ) {
-        console.log("Send request for requestId: ", myid)
+        console.log("Send request for requestId: ", tipID)
             try {
                 var gasP = await fetchGasPrice()
-                let tx = await contractWithSigner.addTip(myid, 1, { from: pubAddr, gasLimit: gas_limit, gasPrice: gasP });
+                let tx = await contractWithSigner.addTip(tipID, 1, { from: pubAddr, gasLimit: gas_limit, gasPrice: gasP });
                 var link = "".concat(etherscanUrl, '/tx/', tx.hash)
                 var ownerlink = "".concat(etherscanUrl, '/address/', tellorMasterAddress)
-                console.log('Yes, a request was sent for requId: ', myid)
+                console.log('Yes, a request was sent for requId: ', tipID)
                 console.log("Hash link: ", link)
                 console.log("Contract link: ", ownerlink)
                 console.log('Waiting for the transaction to be mined');
@@ -170,13 +178,13 @@ let run = async function (net, myid) {
                 console.error(error)
                 process.exit(1)
             }
-        console.log("myId was tipped. reqId: ", myid)
+        console.log("tipID was tipped. reqId: ", tipID)
         process.exit()
         }
         console.error('Not enough balance');
         process.exit(1)
     } else {
-    console.log("Your req id is already on queue", myid)
+    console.log("Your req id is already on queue", tipID)
     process.exit()
     }
 }
