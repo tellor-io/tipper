@@ -10,12 +10,14 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
 const dataId = core.getInput('tipID')
+const dataFreshness = core.getInput('dataFreshness')
 
 //libraries
 const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
 const path = require("path")
 const loadJsonFile = require('load-json-file')
+const moment = require('moment')
 
 //current date and gas limit
 var _UTCtime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
