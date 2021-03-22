@@ -10,14 +10,15 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
 const dataId = core.getInput('tipID')
-const dataFreshness = core.getInput('dataFreshness')
+const freshnessTimeUnit = core.getInput('freshnessTimeUnit')
+const freshnessTimeLength = core.getInput('freshnessTimeLength')
 
 //libraries
 const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
 const path = require("path")
 const loadJsonFile = require('load-json-file')
-const moment = require('moment')
+const dayjs = require('dayjs')
 
 //current date and gas limit
 var _UTCtime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
@@ -116,7 +117,9 @@ let run = async function (net, tipID) {
         var files = fs.readdirSync('/home/runner/work/tip-tester/tip-tester');
         console.log(files)
         let abi = await loadJsonFile(path.join("abi", "tellor.json"))
+        let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
+        let lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
 
     } catch (error) {
@@ -138,6 +141,19 @@ let run = async function (net, tipID) {
         process.exit(1)
     }
 
+    try {
+        //check if requestID has been recently tipped
+        let lastTip = lens.getCurrentValue(dataId)
+        let lastTipTimestamp = lastTip._timestampRetrieved
+        if (dayjs().subtract(freshnessTimeLength, freshnessTimeUnit) > lastTipTimestamp) {
+            console.log("No need to tip! There is fresh data on requestID " + tipID)
+            process.exit()
+        }
+        //if last tip is fresh enough, exit without tipping
+    } catch (error) {
+        console.error(error)
+        process.exit(1)
+    }
     try {
         //check it is not already on queue and if not then tip
         var reqIds = await contractWithSigner.getTopRequestIDs()
