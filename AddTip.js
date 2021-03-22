@@ -144,8 +144,8 @@ let run = async function (net, tipID) {
     try {
         //check if requestID has been recently tipped
         let lastTip = lens.getCurrentValue(dataId)
-        let lastTipTimestamp = lastTip._timestampRetrieved
-        if (dayjs().subtract(freshnessTimeLength, freshnessTimeUnit) > lastTipTimestamp) {
+        let tippingTime = lastTip._timestampRetrieved
+        if (dayjs().subtract(freshnessTimeLength, freshnessTimeUnit) < tippingTime) {
             console.log("No need to tip! There is fresh data on requestID " + tipID)
             process.exit()
         }
