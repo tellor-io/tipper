@@ -10,15 +10,14 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
 const dataId = core.getInput('tipID')
-const freshnessTimeUnit = core.getInput('freshnessTimeUnit')
-const freshnessTimeLength = core.getInput('freshnessTimeLength')
+const dataFreshness = core.getInput('dataFreshness')
 
 //libraries
 const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
 const path = require("path")
 const loadJsonFile = require('load-json-file')
-const dayjs = require('dayjs')
+var parse = require('parse-duration')
 
 //current date and gas limit
 var _UTCtime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
@@ -145,7 +144,8 @@ let run = async function (net, tipID) {
         //check if requestID has been recently tipped
         let lastTip = lens.getCurrentValue(dataId)
         let tippingTime = lastTip._timestampRetrieved
-        if (dayjs().subtract(freshnessTimeLength, freshnessTimeUnit) < tippingTime) {
+        //If less time has passed than the longest desired wait period, exit with friendly message
+        if (new Date() - tippingTime < parse(dataFreshness)) {
             console.log("No need to tip! There is fresh data on requestID " + tipID)
             process.exit()
         }
