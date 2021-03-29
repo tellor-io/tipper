@@ -5,9 +5,12 @@ inputs:
     description: "ethereum network to tip to"
     required: true
     default: "mainnet"
-  myId: #ID of tip
+  requestID: #ID of tip
     description: "ID of Tip"
     required: true
+  dataFreshness:
+    description: "the longest duration of time you would wait before requesting new data"
+    required: false
 outputs:
   time: #id of output
     description: "Timestamp"

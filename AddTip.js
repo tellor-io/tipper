@@ -17,11 +17,15 @@ const ethers = require('ethers');
 const fetch = require('node-fetch-polyfill')
 const path = require("path")
 const loadJsonFile = require('load-json-file')
-const moment = require('moment')
+var parse = require('parse-duration')
 
 //current date and gas limit
 var _UTCtime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
 var gas_limit = 400000
+
+//addresses
+var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
+var tellorLensAddress = '0x577417CFaF319a1fAD90aA135E3848D2C00e68CF'
 
 //print out current time, gas price, and network
 console.log(_UTCtime)
@@ -60,24 +64,23 @@ let run = async function (net, tipID) {
         if (net == "mainnet") {
             var network = "mainnet"
             var etherscanUrl = "https://etherscan.io"
-            var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
-            const url = new URL(process.env.MAINNET_NODE);
-            var urlInfo = {
-                url: url.href,
-                user: url.username,
-                password: url.password,
-                allowInsecureAuthentication: true
-            };
-            var provider = new ethers.providers.JsonRpcProvider(urlInfo)
+            // const url = new URL(process.env.MAINNET_NODE);
+            // var urlInfo = {
+            //     url: url.href,
+            //     user: url.username,
+            //     password: url.password,
+            //     allowInsecureAuthentication: true
+            // };
+            // var provider = new ethers.providers.JsonRpcProvider(urlInfo)
+            var provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_NODE)
 
 
 
         } else if (net == "rinkeby") {
             var network = "rinkeby"
             var etherscanUrl = "https://rinkeby.etherscan.io"
-            var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
             var provider = new ethers.providers.JsonRpcProvider(process.env.RINKEBY_NODE)
@@ -113,7 +116,9 @@ let run = async function (net, tipID) {
         var files = fs.readdirSync('/home/runner/work/tip-tester/tip-tester');
         console.log(files)
         let abi = await loadJsonFile(path.join("abi", "tellor.json"))
+        let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
+        let lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
 
     } catch (error) {
@@ -135,6 +140,20 @@ let run = async function (net, tipID) {
         process.exit(1)
     }
 
+    try {
+        //check if requestID has been recently tipped
+        let lastTip = lens.getCurrentValue(dataId)
+        let tippingTime = lastTip._timestampRetrieved
+        //If less time has passed than the longest desired wait period, exit with friendly message
+        if (new Date() - tippingTime < parse(dataFreshness)) {
+            console.log("No need to tip! There is fresh data on requestID " + tipID)
+            process.exit()
+        }
+        //if last tip is fresh enough, exit without tipping
+    } catch (error) {
+        console.error(error)
+        process.exit(1)
+    }
     try {
         //check it is not already on queue and if not then tip
         var reqIds = await contractWithSigner.getTopRequestIDs()
