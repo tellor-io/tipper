@@ -125,7 +125,7 @@ let run = async function (net, tipID) {
         let abi = await loadJsonFile(path.join("master", "abi", "tellor.json"))
         let lensAbi = await loadJsonFile(path.join("master", "abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
-        let lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
+        var lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
 
     } catch (error) {
