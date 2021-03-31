@@ -117,11 +117,6 @@ let run = async function (net, tipID) {
     //connect to wallet and tellor contract
     try {
         let wallet = new ethers.Wallet(privKey, provider);
-        console.log(process.cwd())
-
-        var fs = require('fs');
-        var files = fs.readdirSync('/home/runner/work/tally-tipper/tally-tipper/master');
-        console.log(files)
         let abi = await loadJsonFile(path.join("master", "abi", "tellor.json"))
         let lensAbi = await loadJsonFile(path.join("master", "abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
