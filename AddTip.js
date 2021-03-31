@@ -85,7 +85,14 @@ let run = async function (net, tipID) {
             var privKey = process.env.PRIVATE_KEY
             var provider = new ethers.providers.JsonRpcProvider(process.env.RINKEBY_NODE)
             
-        } else {
+        } else if (net == "goerli") {
+            var network = "goerli"
+            var etherscanUrl = "https://goerli.etherscan.io"
+            var pubAddr = process.env.PUBLIC_KEY
+            var privKey = process.env.PRIVATE_KEY
+            var provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_NODE)
+        }
+        else {
            console.log( "network not defined")
         }
 
@@ -113,8 +120,6 @@ let run = async function (net, tipID) {
         console.log(process.cwd())
 
         var fs = require('fs');
-        var files = fs.readdirSync('/home/runner/work/tip-tester/tip-tester');
-        console.log(files)
         let abi = await loadJsonFile(path.join("abi", "tellor.json"))
         let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
