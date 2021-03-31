@@ -122,8 +122,8 @@ let run = async function (net, tipID) {
         var fs = require('fs');
         var files = fs.readdirSync('/home/runner/work/tally-tipper/tally-tipper/master');
         console.log(files)
-        let abi = await loadJsonFile(path.join("abi", "tellor.json"))
-        let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
+        let abi = await loadJsonFile(path.join("master", "abi", "tellor.json"))
+        let lensAbi = await loadJsonFile(path.join("master", "abi", "abiTellorLens.json"))
         let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         let lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
