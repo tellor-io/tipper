@@ -120,7 +120,7 @@ let run = async function (net, tipID) {
         console.log(process.cwd())
 
         var fs = require('fs');
-        var files = fs.readdirSync('/home/runner/work/tally-tipper/tally-tipper');
+        var files = fs.readdirSync('/home/runner/work/');
         console.log(files)
         let abi = await loadJsonFile(path.join("abi", "tellor.json"))
         let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
