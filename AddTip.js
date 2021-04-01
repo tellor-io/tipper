@@ -144,7 +144,7 @@ let run = async function (net, tipID) {
 
     try {
         //check if requestID has been recently tipped
-        let lastTip = lens.getCurrentValue(dataId)
+        let lastTip = lens.getCurrentValue(tipID)
         let tippingTime = lastTip._timestampRetrieved
         //If less time has passed than the longest desired wait period, exit with friendly message
         if (new Date() - tippingTime < parse(dataFreshness)) {
