@@ -9,7 +9,7 @@ require('dotenv').config()
 const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
-const dataId = core.getInput('tipID')
+const requestID = core.getInput('requestID')
 const dataFreshness = core.getInput('dataFreshness')
 
 //libraries
@@ -212,4 +212,4 @@ let run = async function (net, tipID) {
     }
 }
 
-run(network, dataId)
+run(network, requestID)
