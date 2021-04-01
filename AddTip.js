@@ -98,7 +98,7 @@ let run = async function (net, tipID) {
         }
 
         console.log("Tellor Address: ", tellorMasterAddress)
-        console.log("nework", network)
+        console.log("network: ", network)
     } catch (error) {
         console.error(error)
         console.log("network error or environment not defined")
