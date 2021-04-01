@@ -87,6 +87,7 @@ let run = async function (net, tipID) {
             
         } else if (net == "goerli") {
             var network = "goerli"
+            var tellorMasterAddress = "0x20374E579832859f180536A69093A126Db1c8aE9"
             var etherscanUrl = "https://goerli.etherscan.io"
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
