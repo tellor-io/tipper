@@ -87,7 +87,7 @@ let run = async function (net, tipID) {
             
         } else if (net == "goerli") {
             var network = "goerli"
-            var tellorMasterAddress = "0x20374E579832859f180536A69093A126Db1c8aE9"
+            // var tellorMasterAddress = "0x20374E579832859f180536A69093A126Db1c8aE9"
             var etherscanUrl = "https://goerli.etherscan.io"
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
@@ -120,7 +120,7 @@ let run = async function (net, tipID) {
         let wallet = new ethers.Wallet(privKey, provider);
         let abi = await loadJsonFile(path.join("master", "abi", "tellor.json"))
         let lensAbi = await loadJsonFile(path.join("master", "abi", "abiTellorLens.json"))
-        let contract = new ethers.Contract(tellorMasterAddress, abi, provider);
+        var contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         var lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
 
