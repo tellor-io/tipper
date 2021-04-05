@@ -16,4 +16,4 @@ outputs:
     description: "Timestamp"
 runs:
   using: "docker"
-  main: "Dockerfile"
+  image: "Dockerfile"
