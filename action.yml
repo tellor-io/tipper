@@ -15,5 +15,5 @@ outputs:
   time: #id of output
     description: "Timestamp"
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: "node12"
+  main: "addTip.js"
