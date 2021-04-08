@@ -6,4 +6,4 @@ RUN pwd
 RUN ls
 RUN apt update && apt install -y git && apt clean autoclean && apt autoremove --yes
 RUN npm install
-CMD ["node", "./addTip.js"]
+ENTRYPOINT ["node", "./addTip.js"]
