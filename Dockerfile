@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:15.14.0-buster-slim
 USER root
 WORKDIR /usr/src/app
 COPY ./ .
