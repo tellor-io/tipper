@@ -1,6 +1,6 @@
 FROM node:14-buster-slim
 USER root
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 COPY ./ .
 RUN pwd
 RUN ls
