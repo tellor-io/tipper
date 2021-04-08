@@ -118,8 +118,8 @@ let run = async function (net, tipID) {
     //connect to wallet and tellor contract
     try {
         let wallet = new ethers.Wallet(privKey, provider);
-        let abi = await loadJsonFile(path.join("master", "abi", "tellor.json"))
-        let lensAbi = await loadJsonFile(path.join("master", "abi", "abiTellorLens.json"))
+        let abi = await loadJsonFile(path.join("abi", "tellor.json"))
+        let lensAbi = await loadJsonFile(path.join("abi", "abiTellorLens.json"))
         var contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         var lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
