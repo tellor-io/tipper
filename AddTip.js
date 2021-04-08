@@ -25,7 +25,6 @@ var gas_limit = 400000
 
 //addresses
 var tellorMasterAddress = '0x88df592f8eb5d7bd38bfef7deb0fbc02cf3778a0'
-var tellorLensAddress = '0x577417CFaF319a1fAD90aA135E3848D2C00e68CF'
 
 //print out current time, gas price, and network
 console.log(_UTCtime)
@@ -62,23 +61,17 @@ let run = async function (net, tipID) {
     try {
         //connect to network
         if (net == "mainnet") {
+            var tellorLensAddress = '0x577417CFaF319a1fAD90aA135E3848D2C00e68CF'
             var network = "mainnet"
             var etherscanUrl = "https://etherscan.io"
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
-            // const url = new URL(process.env.MAINNET_NODE);
-            // var urlInfo = {
-            //     url: url.href,
-            //     user: url.username,
-            //     password: url.password,
-            //     allowInsecureAuthentication: true
-            // };
-            // var provider = new ethers.providers.JsonRpcProvider(urlInfo)
             var provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_NODE)
 
 
 
         } else if (net == "rinkeby") {
+            var tellorLensAddress = '0xebEF7ceB7C43850898e258be0a1ea5ffcdBc3205'
             var network = "rinkeby"
             var etherscanUrl = "https://rinkeby.etherscan.io"
             var pubAddr = process.env.PUBLIC_KEY
