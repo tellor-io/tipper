@@ -6,4 +6,5 @@ RUN pwd
 RUN ls
 RUN apt update && apt install -y git && apt clean autoclean && apt autoremove --yes
 RUN npm install
+RUN ["chmod", "+x", "AddTip.js"]
 ENTRYPOINT ["node", "AddTip.js"]
