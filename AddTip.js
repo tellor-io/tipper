@@ -44,7 +44,8 @@ async function fetchGasPrice() {
         const fetchResult = fetch(URL);
         const response = await fetchResult;
         const jsonData = await response.json();
-        const gasPriceNow = await jsonData.fast * 1;
+        const baseFee = await jsonData.recommendedBaseFee;
+        const gasPriceNow = await jsonData.fast * 1 + baseFee;
         const gasPriceNow2 = await (gasPriceNow) * 1000000000;
         return (gasPriceNow2);
     } catch (e) {
