@@ -9,7 +9,7 @@ require('dotenv').config()
 const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
-const requestID = core.getInput('requestID')
+const queryId = core.getInput('queryId')
 const dataFreshness = core.getInput('dataFreshness')
 
 //libraries
@@ -54,7 +54,7 @@ async function fetchGasPrice() {
 }
 
 
-let run = async function (net, tipID) {
+let run = async function (net, queryId) {
     /* 
     Requests a tip data type for miners to mine
     Sends TRB tip amount to miner network
@@ -68,9 +68,9 @@ let run = async function (net, tipID) {
             var pubAddr = process.env.PUBLIC_KEY
             var privKey = process.env.PRIVATE_KEY
             var provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_NODE)
-
-
-
+            
+            
+            
         } else if (net == "rinkeby") {
             var tellorLensAddress = '0xebEF7ceB7C43850898e258be0a1ea5ffcdBc3205'
             var network = "rinkeby"
@@ -88,9 +88,9 @@ let run = async function (net, tipID) {
             var provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_NODE)
         }
         else {
-           console.log( "network not defined")
+            console.log( "network not defined")
         }
-
+        
         console.log("Tellor Address: ", tellorMasterAddress)
         console.log("network: ", network)
     } catch (error) {
@@ -98,7 +98,7 @@ let run = async function (net, tipID) {
         console.log("network error or environment not defined")
         process.exit(1)
     }
-
+    
     //fetch gas price
     try {
         var gasP = await fetchGasPrice()
@@ -108,7 +108,7 @@ let run = async function (net, tipID) {
         console.log("no gas price fetched")
         process.exit(1)
     }
-
+    
     //connect to wallet and tellor contract
     try {
         let wallet = new ethers.Wallet(privKey, provider);
@@ -117,13 +117,13 @@ let run = async function (net, tipID) {
         var contract = new ethers.Contract(tellorMasterAddress, abi, provider);
         var lens = new ethers.Contract(tellorLensAddress, lensAbi, provider);
         var contractWithSigner = contract.connect(wallet);
-
+        
     } catch (error) {
         console.error(error)
         console.log("oracle not instantiated")
         process.exit(1)
     }
-
+    
     //print wallet's TRB balance
     try {
         var balNow = ethers.utils.formatEther(await provider.getBalance(pubAddr))
@@ -136,14 +136,14 @@ let run = async function (net, tipID) {
         console.error(error)
         process.exit(1)
     }
-
+    
     try {
-        //check if requestID has been recently tipped
-        let lastTip = lens.getCurrentValue(tipID)
+        //check if queryId has been recently tipped
+        let lastTip = lens.getCurrentValue(queryId)
         let tippingTime = lastTip._timestampRetrieved
         //If less time has passed than the longest desired wait period, exit with friendly message
         if (new Date() - tippingTime < parse(dataFreshness)) {
-            console.log("No need to tip! There is fresh data on requestID " + tipID)
+            console.log("No need to tip! There is fresh data on queryId " + queryId)
             process.exit()
         }
         //if last tip is fresh enough, exit without tipping
@@ -151,59 +151,55 @@ let run = async function (net, tipID) {
         console.error(error)
         process.exit(1)
     }
-//     try {
-//         //check it is not already on queue and if not then tip
-//         var reqIds = await contractWithSigner.getTopRequestIDs()
-//         console.log("reqIds", reqIds)
-//         var x = reqIds.length
-//         var inQ = 0
-//         var i = 0
-//             if (x >0){            
-//                 while ( i<x){
-//                     console.log("tipID", tipID)
-//                     if (tipID == reqIds[i]*1) {
-//                         console.log("reqIds[i]", i, reqIds[i]*1 )
-//                         inQ++
-//                         console.log("inQ?", inQ*1)
-//                         } 
-//                     i++
-//                     console.log("i", i)
-//                     if(inQ > 0){
-//                         break
-//                     }
-//                 }
-//            }
-//     } catch (error) {
-//         console.error(error)
-//         process.exit(1)
-//     }
-
+    //     try {
+    //         //check it is not already on queue and if not then tip
+    //         var reqIds = await contractWithSigner.getTopqueryIds()
+    //         console.log("reqIds", reqIds)
+    //         var x = reqIds.length
+    //         var inQ = 0
+    //         var i = 0
+    //             if (x >0){            
+    //                 while ( i<x){
+    //                     console.log("queryId", queryId)
+    //                     if (queryId == reqIds[i]*1) {
+    //                         console.log("reqIds[i]", i, reqIds[i]*1 )
+    //                         inQ++
+    //                         console.log("inQ?", inQ*1)
+    //                         } 
+    //                     i++
+    //                     console.log("i", i)
+    //                     if(inQ > 0){
+    //                         break
+    //                     }
+    //                 }
+    //            }
+    //     } catch (error) {
+    //         console.error(error)
+    //         process.exit(1)
+    //     }
+    
     //send tip if balance is sufficient
     if (gasP != 0 && txestimate < balNow && ttbalanceNow > 1 ) {
-        console.log("Send request for requestId: ", tipID)
-            try {
-                var gasP = await fetchGasPrice()
-                let tx = await contractWithSigner.addTip(tipID, 1, { from: pubAddr, gasLimit: gas_limit, gasPrice: gasP });
-                var link = "".concat(etherscanUrl, '/tx/', tx.hash)
-                var ownerlink = "".concat(etherscanUrl, '/address/', tellorMasterAddress)
-                console.log('Yes, a request was sent for requId: ', tipID)
-                console.log("Hash link: ", link)
-                console.log("Contract link: ", ownerlink)
-                console.log('Waiting for the transaction to be mined');
-                await tx.wait() // If there's an out of gas error the second parameter is the receipt.
-            } catch (error) {
-                console.error(error)
-                process.exit(1)
-            }
-    console.log("tipID was tipped. reqId: ", tipID)
-    process.exit()
+        console.log("Send request for queryId: ", queryId)
+        try {
+            var gasP = await fetchGasPrice()
+            let tx = await contractWithSigner.addTip(queryId, 1, { from: pubAddr, gasLimit: gas_limit, gasPrice: gasP });
+            var link = "".concat(etherscanUrl, '/tx/', tx.hash)
+            var ownerlink = "".concat(etherscanUrl, '/address/', tellorMasterAddress)
+            console.log('Yes, a request was sent for requId: ', queryId)
+            console.log("Hash link: ", link)
+            console.log("Contract link: ", ownerlink)
+            console.log('Waiting for the transaction to be mined');
+            await tx.wait() // If there's an out of gas error the second parameter is the receipt.
+        } catch (error) {
+            console.error(error)
+            process.exit(1)
+        }
+        console.log("queryId was tipped. queryId: ", queryId)
+        process.exit()
     }
     console.error('Not enough balance');
     process.exit(1)
-    } else {
-    console.log("Your req id is already on queue", tipID)
-    process.exit()
-    }
 }
 
-run(network, requestID)
+run(network, queryId)
