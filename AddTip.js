@@ -9,7 +9,7 @@ require('dotenv').config()
 const core = require('@actions/core')
 const github = require('@actions/github')
 const network = core.getInput('network')
-const queryId = core.getInput('queryId')
+const queryId = core.getInput('requestID')
 const dataFreshness = core.getInput('dataFreshness')
 
 //libraries
