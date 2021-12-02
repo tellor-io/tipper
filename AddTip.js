@@ -151,32 +151,32 @@ let run = async function (net, tipID) {
         console.error(error)
         process.exit(1)
     }
-    try {
-        //check it is not already on queue and if not then tip
-        var reqIds = await contractWithSigner.getTopRequestIDs()
-        console.log("reqIds", reqIds)
-        var x = reqIds.length
-        var inQ = 0
-        var i = 0
-            if (x >0){            
-                while ( i<x){
-                    console.log("tipID", tipID)
-                    if (tipID == reqIds[i]*1) {
-                        console.log("reqIds[i]", i, reqIds[i]*1 )
-                        inQ++
-                        console.log("inQ?", inQ*1)
-                        } 
-                    i++
-                    console.log("i", i)
-                    if(inQ > 0){
-                        break
-                    }
-                }
-           }
-    } catch (error) {
-        console.error(error)
-        process.exit(1)
-    }
+//     try {
+//         //check it is not already on queue and if not then tip
+//         var reqIds = await contractWithSigner.getTopRequestIDs()
+//         console.log("reqIds", reqIds)
+//         var x = reqIds.length
+//         var inQ = 0
+//         var i = 0
+//             if (x >0){            
+//                 while ( i<x){
+//                     console.log("tipID", tipID)
+//                     if (tipID == reqIds[i]*1) {
+//                         console.log("reqIds[i]", i, reqIds[i]*1 )
+//                         inQ++
+//                         console.log("inQ?", inQ*1)
+//                         } 
+//                     i++
+//                     console.log("i", i)
+//                     if(inQ > 0){
+//                         break
+//                     }
+//                 }
+//            }
+//     } catch (error) {
+//         console.error(error)
+//         process.exit(1)
+//     }
 
     //send tip if balance is sufficient
     if (inQ ==0) {
