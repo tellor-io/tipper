@@ -179,8 +179,7 @@ let run = async function (net, tipID) {
 //     }
 
     //send tip if balance is sufficient
-    if (inQ ==0) {
-        if (gasP != 0 && txestimate < balNow && ttbalanceNow > 1 ) {
+    if (gasP != 0 && txestimate < balNow && ttbalanceNow > 1 ) {
         console.log("Send request for requestId: ", tipID)
             try {
                 var gasP = await fetchGasPrice()
@@ -196,11 +195,11 @@ let run = async function (net, tipID) {
                 console.error(error)
                 process.exit(1)
             }
-        console.log("tipID was tipped. reqId: ", tipID)
-        process.exit()
-        }
-        console.error('Not enough balance');
-        process.exit(1)
+    console.log("tipID was tipped. reqId: ", tipID)
+    process.exit()
+    }
+    console.error('Not enough balance');
+    process.exit(1)
     } else {
     console.log("Your req id is already on queue", tipID)
     process.exit()
